@@ -1,4 +1,3 @@
-
 import openpyxl
 import logging
 from openpyxl.styles import PatternFill
@@ -34,9 +33,6 @@ def highlight_month_dates(file_path, sheet_name, target_sheet_name="HighlightedD
         target_word_row = 2
         target_column = 1
 
-        # Define the fill style for highlighting
-        highlight_fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
-
         # Get the current date, month, and year
         today = datetime.today()
         str_today = str(today)
@@ -55,21 +51,20 @@ def highlight_month_dates(file_path, sheet_name, target_sheet_name="HighlightedD
             for cell in row:
                 if isinstance(cell.value, datetime):
                     date_value = cell.value
-                    
-                    if date_value.month != current_month:
-                        cell.fill = PatternFill()  # Clear the highlight
-                    elif date_value.month == current_month and date_value.year == current_year:
-                        cell.fill = highlight_fill
+                    cell.fill = PatternFill()  # Clear the highlight
+
+                    if date_value.month == current_month:
+                        cell.fill = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
                         cell.value = date_value.replace(year=date_value.year + 1)
                     
-                # pull highlighted cell value row "L" into separate sheet    
-                if cell.fill == PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid"):
-                # Pull the values from columns A, B, and C
-                    ws_target.cell(row=target_row, column=1).value = ws.cell(row=cell.row, column=3).value
-                    ws_target.cell(row=target_row, column=2).value = ws.cell(row=cell.row, column=2).value
-                    ws_target.cell(row=target_row, column=3).value = ws.cell(row=cell.row, column=5).value
-                    ws_target.cell(row=target_row, column=4).value = ws.cell(row=cell.row, column=12).value
-                    target_row += 1
+            # pull highlighted cell value row "L" into separate sheet    
+            if cell.fill == PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid"):
+            # Pull the values from columns A, B, and C
+                ws_target.cell(row=target_row, column=1).value = ws.cell(row=cell.row, column=3).value
+                ws_target.cell(row=target_row, column=2).value = ws.cell(row=cell.row, column=2).value
+                ws_target.cell(row=target_row, column=3).value = ws.cell(row=cell.row, column=5).value
+                ws_target.cell(row=target_row, column=4).value = ws.cell(row=cell.row, column=12).value
+                target_row += 1
 
         for row in ws_target.iter_rows(min_row=2, max_row=ws_target.max_row, min_col=1, max_col=2):
             cell = row[0]
@@ -86,7 +81,8 @@ def highlight_month_dates(file_path, sheet_name, target_sheet_name="HighlightedD
             #         test_document.add_paragraph(f"Log no {ws_target.cell(row=target_word_row, column=1).value}")
             #         target_word_row += 1
         
-        test_document.save('C:/Users/cyh3/OneDrive - PGE/Desktop/test/test.docx')
+        # test_document.save('C:/Users/cyh3/OneDrive - PGE/Desktop/test/test.docx')
+        wb.save(f'C:/Users/cyh3/OneDrive - PGE/Desktop/test/Renewable Bidding - Upcoming Contracts {yyyymmdd}.xlsx')
     except Exception as e:
         print(f"An error occurred: {e}")
 # Usage example

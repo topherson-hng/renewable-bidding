@@ -75,7 +75,7 @@ def highlight_month_dates(file_path, sheet_name, target_sheet_name="HighlightedD
 
     max_row_for_d = max((d.row for d in ws_target['D'] if d.value is not None))
     style = TableStyleInfo(name="TableStyleMedium9", showRowStripes=True)
-    table = Table(displayName="penguins", ref="A1:" + get_column_letter(ws_target.max_column) + str(max_row_for_d))
+    table = Table(displayName="table1", ref="A1:" + get_column_letter(ws_target.max_column) + str(max_row_for_d))
     table.tableStyleInfo = style
     ws_target.add_table(table)
 
@@ -85,18 +85,18 @@ def highlight_month_dates(file_path, sheet_name, target_sheet_name="HighlightedD
             name_cell = ws_target.cell(row=word_row, column=2).value
             resource_cell = ws_target.cell(row=word_row, column=3).value
             date_cell = ws_target.cell(row=word_row, column=4).value
-            dt_cell = date_cell.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)
+            # dt_cell = date_cell.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)
             
             if row[0].value:
                 test_document.add_paragraph(f"{name_cell} - Resource ID: {resource_cell}")
-                test_document.add_paragraph(f"The new curtailment anniversary is on {dt_cell}")
+                test_document.add_paragraph(f"The new curtailment anniversary is on {date_cell}")
                 word_row += 1
 
     # Save the workbook 
-    test_document.save('C:/Users/cyh3/OneDrive - PGE/Desktop/test/test.docx')
+    test_document.save(f'C:/Users/cyh3/OneDrive - PGE/Desktop/test/Curtailment Info {yyyymmdd}.docx')
     wb.save(f'C:/Users/cyh3/OneDrive - PGE/Desktop/test/Renewable Bidding - Upcoming Contracts {yyyymmdd}.xlsx')
 
 # Usage 
-file_path = r'C:/Users/cyh3/OneDrive - PGE/Desktop/test/Renewable Bidding - Upcoming Contracts 20240626.xlsm'
+file_path = r'C:/Users/cyh3/OneDrive - PGE/Desktop/test/Renewable Bidding - Upcoming Contracts 20240822.xlsx'
 sheet_name = 'CurrentlyBidContracts'
 highlight_month_dates(file_path, sheet_name)
